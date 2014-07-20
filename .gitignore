@@ -1,0 +1,7 @@
+__py*
+.*
+*.pyc
+nbproject
+/_extras
+/make*.py*
+/pas_tasks_loader.*
