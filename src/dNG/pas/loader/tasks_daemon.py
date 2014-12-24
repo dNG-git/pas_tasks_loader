@@ -35,7 +35,6 @@ from argparse import ArgumentParser
 from time import time
 
 from dNG.pas.data.settings import Settings
-from dNG.pas.data.tasks.database import Database as DatabaseTasks
 from dNG.pas.loader.cli import Cli
 from dNG.pas.module.named_loader import NamedLoader
 from dNG.pas.net.bus.client import Client as BusClient
@@ -75,10 +74,6 @@ Constructor __init__(TasksDaemon)
 		"""
 Cache instance
 		"""
-		self.database_tasks_instance = None
-		"""
-DatabaseTasks instance
-		"""
 		self.server = None
 		"""
 Server thread
@@ -99,13 +94,13 @@ Callback for execution.
 
 :param args: Parsed command line arguments
 
-:since: v1.0.0
+:since: v0.1.00
 		"""
 
 		Settings.read_file("{0}/settings/pas_global.json".format(Settings.get("path_data")))
 		Settings.read_file("{0}/settings/pas_core.json".format(Settings.get("path_data")), True)
 		Settings.read_file("{0}/settings/pas_tasks_daemon.json".format(Settings.get("path_data")), True)
-		if (args.additional_settings != None): Settings.read_file(args.additional_settings, True)
+		if (args.additional_settings is not None): Settings.read_file(args.additional_settings, True)
 
 		if (not Settings.is_defined("pas_tasks_daemon_listener_address")): raise IOException("No listener address defined for the TasksDaemon")
 
@@ -123,11 +118,11 @@ Callback for execution.
 		else:
 		#
 			self.cache_instance = NamedLoader.get_singleton("dNG.pas.data.cache.Content", False)
-			if (self.cache_instance != None): Settings.set_cache_instance(self.cache_instance)
+			if (self.cache_instance is not None): Settings.set_cache_instance(self.cache_instance)
 
 			self.log_handler = NamedLoader.get_singleton("dNG.pas.data.logging.LogHandler", False)
 
-			if (self.log_handler != None):
+			if (self.log_handler is not None):
 			#
 				Hook.set_log_handler(self.log_handler)
 				NamedLoader.set_log_handler(self.log_handler)
@@ -142,11 +137,7 @@ Callback for execution.
 			self.server = BusServer("pas_tasks_daemon")
 			self._set_time_started(time())
 
-			self.database_tasks_instance = DatabaseTasks.get_instance()
-			Hook.register("dNG.pas.Status.onStartup", self.database_tasks_instance.start)
-			Hook.register("dNG.pas.Status.onShutdown", self.database_tasks_instance.stop)
-
-			if (self.log_handler != None): self.log_handler.info("TasksDaemon starts listening", context = "pas_tasks")
+			if (self.log_handler is not None): self.log_handler.info("TasksDaemon starts listening", context = "pas_tasks")
 
 			Hook.call("dNG.pas.Status.onStartup")
 			Hook.call("dNG.pas.tasks.Daemon.onStartup")
@@ -166,7 +157,7 @@ Callback for shutdown.
 		Hook.call("dNG.pas.tasks.Daemon.onShutdown")
 		Hook.call("dNG.pas.Status.onShutdown")
 
-		if (self.cache_instance != None): self.cache_instance.disable()
+		if (self.cache_instance is not None): self.cache_instance.disable()
 		Hook.free()
 	#
 
@@ -182,18 +173,12 @@ Stops the running server instance.
 :since:  v0.1.00
 		"""
 
-		if (self.database_tasks_instance != None):
-		#
-			if (self.database_tasks_instance.is_started()): self.database_tasks_instance.stop()
-			self.database_tasks_instance = None
-		#
-
-		if (self.server != None):
+		if (self.server is not None):
 		#
 			self.server.stop()
 			self.server = None
 
-			if (self.log_handler != None): self.log_handler.info("TasksDaemon stopped listening", context = "pas_tasks")
+			if (self.log_handler is not None): self.log_handler.info("TasksDaemon stopped listening", context = "pas_tasks")
 		#
 
 		return last_return

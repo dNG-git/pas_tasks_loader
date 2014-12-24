@@ -44,7 +44,7 @@ try:
 #
 except Exception as handled_exception:
 #
-	if (tasks_daemon != None):
+	if (tasks_daemon is not None):
 	#
 		tasks_daemon.error(handled_exception)
 		tasks_daemon.stop()
