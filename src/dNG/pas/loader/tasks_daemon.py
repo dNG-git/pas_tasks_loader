@@ -111,8 +111,6 @@ Callback for execution.
 			pid = client.request("dNG.pas.Status.getOSPid")
 			client.request("dNG.pas.Status.stop")
 
-			client.disconnect()
-
 			self._wait_for_os_pid(pid)
 		#
 		else:
