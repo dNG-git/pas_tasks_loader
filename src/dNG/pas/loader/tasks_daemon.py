@@ -81,6 +81,7 @@ Server thread
 
 		self.arg_parser = ArgumentParser()
 		self.arg_parser.add_argument("--additionalSettings", action = "store", type = str, dest = "additional_settings")
+		self.arg_parser.add_argument("--reloadPlugins", action = "store_true", dest = "reload_plugins")
 		self.arg_parser.add_argument("--stop", action = "store_true", dest = "stop")
 
 		Cli.register_run_callback(self._on_run)
@@ -104,7 +105,12 @@ Callback for execution.
 
 		if (not Settings.is_defined("pas_tasks_daemon_listener_address")): raise IOException("No listener address defined for the TasksDaemon")
 
-		if (args.stop):
+		if (args.reload_plugins):
+		#
+			client = BusClient("pas_tasks_daemon")
+			client.request("dNG.pas.Plugins.reload")
+		#
+		elif (args.stop):
 		#
 			client = BusClient("pas_tasks_daemon")
 
