@@ -32,7 +32,7 @@ https://www.direct-netware.de/redirect?licenses;gpl
 #echo(__FILEPATH__)#
 """
 
-from dNG.pas.loader.tasks_daemon import TasksDaemon
+from dNG.loader.tasks_daemon import TasksDaemon
 import sys
 
 tasks_daemon = None
