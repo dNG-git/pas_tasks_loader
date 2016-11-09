@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-##j## BOF
 
 """
 direct PAS
@@ -38,18 +37,11 @@ import sys
 tasks_daemon = None
 
 try:
-#
-	tasks_daemon = TasksDaemon()
-	tasks_daemon.run()
-#
+    tasks_daemon = TasksDaemon()
+    tasks_daemon.run()
 except Exception as handled_exception:
+    if (tasks_daemon is not None):
+        tasks_daemon.error(handled_exception)
+        tasks_daemon.stop()
+    else: sys.stderr.write("{0!r}".format(sys.exc_info()))
 #
-	if (tasks_daemon is not None):
-	#
-		tasks_daemon.error(handled_exception)
-		tasks_daemon.stop()
-	#
-	else: sys.stderr.write("{0!r}".format(sys.exc_info()))
-#
-
-##j## EOF
