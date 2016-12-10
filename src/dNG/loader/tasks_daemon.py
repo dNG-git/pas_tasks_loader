@@ -30,6 +30,8 @@ https://www.direct-netware.de/redirect?licenses;gpl
 #echo(__FILEPATH__)#
 """
 
+# pylint: disable=import-error, no-name-in-module
+
 from argparse import ArgumentParser
 from time import time
 
@@ -94,6 +96,8 @@ Callback for execution.
 
 :since: v0.2.00
         """
+
+        # pylint: disable=attribute-defined-outside-init
 
         Settings.read_file("{0}/settings/pas_global.json".format(Settings.get("path_data")))
         Settings.read_file("{0}/settings/pas_core.json".format(Settings.get("path_data")), True)
